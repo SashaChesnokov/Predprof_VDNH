@@ -1,15 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Авторизация</title>
-</head>
-<body>
-    <h1>Авторизация</h1>
-    <form method="post" action="/login/">
-        {% csrf_token%}
-        {{ form.as_p }}
-        <input type="submit" value="Войти">
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card border-danger">
+                    <div class="card-header border-danger bg-danger">
+                        <b class="text-white">Авторизация</b>
+                    </div>
+                    <div class="card-body">
+                        <center><form method="post" action="/login/">
+                            {% csrf_token%}
+                            {{ form.as_p }}
+                            <input type="submit" class="btn btn-outline-danger w-25" value="Войти">
+                        </form></center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
