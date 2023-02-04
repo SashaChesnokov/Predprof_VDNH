@@ -4,14 +4,14 @@
         <div class="row mt-5">
             <div class="col">
                 <div class="card border-danger">
-                    <div class="card-header border-danger bg-danger">
-                        <b class="text-white">Авторизация</b>
+                    <div class="card-header bg-danger-subtle border-danger-subtle">
+                        <b class="text-danger-emphasis">Авторизация</b>
                     </div>
                     <div class="card-body">
                         <center><form method="post" action="/login/">
                             {% csrf_token%}
                             {{ form.as_p }}
-                            <input type="submit" class="btn btn-outline-danger w-25" value="Войти">
+                            <input type="submit" class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle w-25" value="Войти">
                         </form></center>
                     </div>
                 </div>
