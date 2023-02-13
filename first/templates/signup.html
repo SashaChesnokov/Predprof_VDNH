@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger-subtle border-danger-subtle">
+                        <b class="text-danger-emphasis">Авторизация</b>
+                    </div>
+                    <div class="card-body">
+                        <center>
+                            <form method="post">
+                              {% csrf_token %}
+                              {{ form.as_p }}
+                              <button type="submit" class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle w-25">Зарегистрироваться</button>
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
