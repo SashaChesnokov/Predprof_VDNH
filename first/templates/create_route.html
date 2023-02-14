@@ -1,49 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
-        <center><div class="row mt-5">
-            <center><div class="col">
-                <div class="card border-danger">
-                    <div class="card-header border-danger-subtle bg-danger-subtle">
-                        <b class="text-danger-emphasis">Создание маршрута</b>
-                    </div>
-                    <div class="card-body">
+<div class="container">
+    <center>
+        <div class="row mt-5">
+            <center>
+                <div class="col">
+                    <div class="card border-danger">
+                        <img src="..." class="card-img-top border-danger-subtle bg-danger-subtle" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><b class="text-danger-emphasis">Создание маршрута</b></h5>
+                        </div>
                         <div class="mb-3 row">
                             <div class="col">
                                 <form action="{% url 'route' %}" method="post">
                                     {% csrf_token %}
 
                                     {% if errors %}
-                                        {{ errors }}
+                                    {{ errors }}
                                     {% endif %}
-                                    {% for field in form %}
-                                        <div class="row">
-                                            <div class="col-6">
-                                            {{ field.label_tag }}
+                                    <ul class="list-group list-group-flush">
+                                        {% for field in form %}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    {{ field.label_tag }}
+                                                </div>
+                                                <div class="col-6">
+                                                    {{ field }}
+                                                </div>
                                             </div>
-                                            <div class="col-6">
-                                            {{ field }}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                    <input type="submit" value="Создать" class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle w-25">
+                                        </li>
+                                        {% endfor %}
+                                        <li class="list-group-item"><input type="submit" value="Создать"
+                                                                           class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle w-25">
+                                        </li>
+                                    </ul>
                                 </form>
                             </div>
                         </div>
+                        {% if request.method == "POST" %}
                         <div class="mb-3 row">
                             <div class="col">
                                 <p>Длина Маршрута: {{ dist }}</p>
-                                <center><ul>
-                                    {% for i in way_arr %}
-                                        <li>{{ i }}</li>
-                                    {% endfor %}
-                                </ul></center>
+                                <center>
+                                    <ul class="list-group list-group-flush">
+                                        {% for i in way_arr %}
+                                        <center>
+                                            <li class="list-group-item" style="width: 18rem;">{{ i }}</li>
+                                        </center>
+                                        {% endfor %}
+                                    </ul>
+                                </center>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
-            </div></center>
+            </center>
         </div>
-        </center>
-    </div>
+    </center>
+</div>
+
 {% endblock %}

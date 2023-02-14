@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from first.forms import FindForm
-from first.models import Pavilion
+from first.models import Pavilion, Way
 
 g = []
 f = open("first/dist.txt", "r")
@@ -53,6 +53,15 @@ def Info_page(request):
     return render(request, 'info.html', context)
 
 
+def History_page(request):
+    context = {}
+
+    history = list(Way.objects.filter(user=request.user))
+    history.reverse()
+    context['history'] = history
+    return render(request, 'history.html', context)
+
+
 def Route_page(request):
     context = {}
 
@@ -66,7 +75,10 @@ def Route_page(request):
             way_arr = way[1]
             context['dist'] = dist
             context['way_arr'] = way_arr
-
+            s_arr = str(way_arr[0]) + " -> " + str(way_arr[-1])
+            if request.user.is_authenticated:
+                record = Way(user=request.user, arr=s_arr, created_at=datetime.datetime.now(), time=dist)
+                record.save()
 
     else:
         form = FindForm()

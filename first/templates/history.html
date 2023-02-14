@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <center><div class="row mt-5">
+            <div class="col">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger-subtle border-danger-subtle">
+                        <b class="text-danger-emphasis">История маршрутов</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-1 row">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Маршрут</td>
+                                    <td>Примерное время прохождения</td>
+                                    <td>Дата создания</td>
+                                </tr>
+                                {% for his in history %}
+                                    <tr>
+                                        <td>{{ his.arr }}</td>
+                                        <td>{{ his.time }} мин.</td>
+                                        <td>{{ his.created_at }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </center>
+    </div>
+{% endblock %}

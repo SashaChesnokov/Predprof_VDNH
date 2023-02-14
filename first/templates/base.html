@@ -91,7 +91,7 @@
                     </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link active text-light" href="#">История маршрутов</a>
+                            <a class="nav-link active text-light" href="{% url 'history' %}">История маршрутов</a>
                         </li>
                     {% endif %}
                     {% if request.user.is_authenticated %}

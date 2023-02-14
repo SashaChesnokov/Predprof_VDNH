@@ -14,4 +14,6 @@ class Pavilion(models.Model):
 
 class Way(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    arr = models.TextField(default='')
+    time = models.IntegerField(default=0)
     created_at = models.DateField(default=datetime.datetime.now())
