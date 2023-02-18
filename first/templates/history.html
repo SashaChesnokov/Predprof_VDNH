@@ -12,13 +12,15 @@
                             <table class="table table-striped">
                                 <tr>
                                     <td>Маршрут</td>
+                                    <td>Длина</td>
                                     <td>Примерное время прохождения</td>
                                     <td>Дата создания</td>
                                 </tr>
                                 {% for his in history %}
                                     <tr>
                                         <td>{{ his.arr }}</td>
-                                        <td>{{ his.time }} мин.</td>
+                                        <td>{{ his.distance }}</td>
+                                        <td>{{ his.time }}</td>
                                         <td>{{ his.created_at }}</td>
                                     </tr>
                                 {% endfor %}

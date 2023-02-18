@@ -5,18 +5,23 @@
             <div class="col">
                 <div class="card border-danger">
                     <div class="card-header border-danger-subtle bg-danger-subtle">
-                        <b class="text-danger-emphasis">Вход в аккаунт</b>
+                        <b class="text-danger-emphasis">Меню</b>
                     </div>
                     <div class="card-body">
 
                         <div class="mb-3 row mt-3">
                             <center><div class="col">
-                                <a class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle" href="{% url 'signup' %}">Зарегистрироваться</a>
+                                <a class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle" href="{% url 'gen_route' %}">Выбор начального и конечного павильона</a>
                             </div></center>
                         </div>
                         <div class="mb-3 row">
                             <center><div class="col">
-                                <a class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle" href="{% url 'login' %}">Войти</a>
+                                <a class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle" href="#">Выбор готового маршрута</a>
+                            </div></center>
+                        </div>
+                        <div class="mb-3 row">
+                            <center><div class="col">
+                                <a class="btn text-danger-emphasis bg-danger-subtle border-danger-subtle" href="#">Создание маршрута по времени </a>
                             </div></center>
                         </div>
                     </div>

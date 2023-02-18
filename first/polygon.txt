@@ -1,0 +1,7 @@
+a;None;des; 2 1 3 2 7 1
+b;None;des; 1 1 7 1
+c;None;des; 1 2 7 1 6 6
+d;None;des;
+e;None;des;
+test;None;des; 3 6
+f;None;des; 1 1 2 1 3 1

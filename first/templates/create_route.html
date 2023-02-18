@@ -8,15 +8,16 @@
                     <div class="card border-danger">
                         <div class="row mt-5">
                             <div class="col">
-                                <img src="https://sun9-70.userapi.com/impg/OgJp2vdmQjbzn6KjnpR7ZkNpbBKjoZ8qhB_PTw/_K7d9t64Jec.jpg?size=1240x1690&quality=96&sign=1f1ebe51b05c13257df37414eec9f974&type=album" class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                                <img src="https://sun9-70.userapi.com/impg/OgJp2vdmQjbzn6KjnpR7ZkNpbBKjoZ8qhB_PTw/_K7d9t64Jec.jpg?size=1240x1690&quality=96&sign=1f1ebe51b05c13257df37414eec9f974&type=album"
+                                     class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
                             </div>
                         </div>
                         <div class="card-body">
-                        <h5 class="card-title"><b class="text-danger-emphasis">Создание маршрута</b></h5>
+                            <h5 class="card-title"><b class="text-danger-emphasis">Создание маршрута</b></h5>
                         </div>
                         <div class="mb-3 row">
                             <div class="col">
-                                <form action="{% url 'route' %}" method="post">
+                                <form action="{% url 'gen_route' %}" method="post">
                                     {% csrf_token %}
 
                                     {% if errors %}
@@ -45,7 +46,7 @@
                         {% if request.method == "POST" %}
                         <div class="mb-3 row">
                             <div class="col">
-                                <p>Длина Маршрута: {{ dist }}</p>
+                                <p>Время прохождения маршрута: {{ dist }}</p>
                                 <center>
                                     <ul class="list-group list-group-flush">
                                         {% for i in way_arr %}
