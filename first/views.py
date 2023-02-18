@@ -142,13 +142,13 @@ def Route_SF_page(request):
             way_arr = [(str(i) + " - " + pols[i - 1].name) for i in res[1]]
 
             if dist != -1:
-                context['dist'] = str(dist) + " мин."
+                context['dist'] = "Время прохождения маршрута: " + str(dist) + " мин."
                 w_distance = str(dist*66) + " м."
                 time = str(dist) + " мин."
                 context['way_arr'] = way_arr
                 s_arr = str(pols[res[1][0] - 1].name) + " -> " + str(pols[res[1][-1] - 1].name)
             else:
-                context['dist'] = "такой маршрут невозможно построить"
+                context['dist'] = "Такой маршрут невозможно построить ¯\_(ツ)_/¯"
                 context['way_arr'] = []
                 w_distance = ''
                 time = ''
