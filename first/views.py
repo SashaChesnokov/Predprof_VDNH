@@ -1,5 +1,6 @@
 import datetime
 import copy
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
 
@@ -119,6 +120,7 @@ def Info_page(request):
     return render(request, 'info.html', context)
 
 
+@login_required
 def History_page(request):
     context = {}
 
