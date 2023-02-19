@@ -33,7 +33,6 @@ for i in range(n):
     for i in range(3, len(reader), 2):
         tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
     pols += [copy.deepcopy(tmp)]
-    print(tmp.name, tmp.tegs, tmp.des, tmp.edges)
 
 
 
@@ -48,7 +47,6 @@ for x in range(len(g)):
     for y in range(len(g)):
         if g[x][y] != g[y][x]:
             counter += 1
-print("Количество ошибок в построении графа:", counter)
 
 # Модифицированная деикстра
 def findWay(g, s, f):
