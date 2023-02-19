@@ -45,7 +45,7 @@ class TimeForm(forms.Form):
         )
     )
     time = forms.IntegerField(
-        label='Введите время, за которое хотите пройти маршрут',
+        label='Введите время в минутах, за которое хотите пройти маршрут',
         max_value=60,
         min_value=1,
         widget=forms.NumberInput(
