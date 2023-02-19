@@ -88,7 +88,7 @@ for s in range(n):
 
 
 # Генератор маршрутор
-def routeGenerator(g, s, length, pols, fav = '', notfav = []):
+def routeGenerator(g, s, length, pols, fav =[], notfav = []):
   if sum([g[s][i] for i in range(len(g))]) == -len(g) + 1:
       return [0, []]
   inf = 10 ** 10
@@ -96,10 +96,11 @@ def routeGenerator(g, s, length, pols, fav = '', notfav = []):
     for i in range(len(pols)):
       for j in fav:
         if j in pols[i].tegs:
-          pols[i].rep = inf
+          pols[i].rep += inf
       for j in notfav:
         if j in pols[i].tegs:
           pols[i].rep = -inf
+
   if length > 0:
     tmp = pols[s].rep
     pols[s].rep = -inf
@@ -108,7 +109,7 @@ def routeGenerator(g, s, length, pols, fav = '', notfav = []):
     for i in range(len(g[s])):
       if g[s][i] > 0:
         n += 1
-        choice += [routeGenerator(g, i, length - g[s][i], pols)]
+        choice += [routeGenerator(g, i, length - g[s][i], copy.deepcopy(pols))]
     maxInd = 0
     for i in range(1, n):
       if choice[i][0] > choice[maxInd][0]:
@@ -192,10 +193,9 @@ def Route_time_page(request):
             start = form.cleaned_data['start']
             time = form.cleaned_data['time']
             theme = form.cleaned_data['vote_type']
-            res = routeGenerator(g, start - 1, time, copy.deepcopy(pols), fav=theme)[1]
-            # res = [pols[i - 1].name for i in res]
+
+            res = routeGenerator(g, start - 1, time, copy.deepcopy(pols), [theme])[1]
             context['way_arr'] = [(str(i) + " - " + pols[i-1].name) for i in res]
-            print(res)
             res = [pols[i-1].name for i in res]
             w_distance = str(time * 66) + " м."
             time = str(time) + " мин."
