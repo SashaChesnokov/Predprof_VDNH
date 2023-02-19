@@ -29,7 +29,7 @@ urlpatterns = [
     path('route_menu/', Route_menu_page, name='route_menu'),
     path('points_route/', Route_points_page, name='points_route'),
     path('time_route/', Route_time_page, name='time_route'),
-    path('interest_route/', Route_interest_page, name='interest_route'),
+    path('static_route/', Route_interest_page, name='static_route'),
     path('history/', History_page, name='history')
 
 ]

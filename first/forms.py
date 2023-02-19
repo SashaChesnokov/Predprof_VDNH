@@ -26,6 +26,12 @@ class PointsForm(forms.Form):
     )
 
 
+vote_type = [("наука", "наука"), ("выставка", "выставка"),
+                 ("технологии", "технологии"), ("история", "история"),
+                 ("архитектура", "архитектура"), ("фонтан", "фонтан"),
+                 ("народы ссср", "народы ссср"), ("искусство", "искусство")]
+
+
 class TimeForm(forms.Form):
     start = forms.IntegerField(
         label='Введите номер павильона, в котором вы находитесь',
@@ -49,16 +55,17 @@ class TimeForm(forms.Form):
             }
         )
     )
+    vote_type = forms.ChoiceField(
+        label='Выберите тему маршрута',
+        widget=forms.Select,
+        choices=vote_type
+    )
 
 
 class InterestForm(forms.Form):
-    theme = forms.CharField(
-        label='Введите тему маршрута',
-        max_length=20,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'style': 'width:100px'
-            }
-        )
+
+    vote_type = forms.ChoiceField(
+        label='Выберите тему маршрута',
+        widget=forms.Select,
+        choices=vote_type
     )

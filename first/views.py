@@ -23,22 +23,32 @@ class Polygon:
             self.tegs = tegs
 
 # Инциализация графа
-p = open("first/polygon.txt", "r")
-n = len(open("first/polygon.txt", "r").readlines())
+p = open('first/polygon.txt', 'r', encoding='utf-8')
+n = len(open('first/polygon.txt', 'r', encoding='utf-8').readlines())
 pols = []
 for i in range(n):
     reader = p.readline().replace(";", " ").split()
-    tmp = Polygon(name=reader[0], number=i, tegs=reader[1].replace("_", " ").split(), des=reader[2].replace("_", " "),
+    tmp = Polygon(name=reader[0].replace("_", " "), number=i, tegs=reader[1].replace("-", " ").split(), des=reader[2].replace("_", " "),
                   rep=1, edges=[])
     for i in range(3, len(reader), 2):
         tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
     pols += [copy.deepcopy(tmp)]
+    print(tmp.name, tmp.tegs, tmp.des, tmp.edges)
+
+
+
 g = [[-1 for i in range(len(pols))] for i in range(len(pols))]
 for i in range(len(pols)):
     g[i][i] = 0
 for p in range(len(pols)):
     for i in pols[p].edges:
         g[p][i[0] - 1] = i[1]
+counter = 0
+for x in range(len(g)):
+    for y in range(len(g)):
+        if g[x][y] != g[y][x]:
+            counter += 1
+print("Количество ошибок в построении графа:", counter)
 
 # Модифицированная деикстра
 def findWay(g, s, f):
@@ -76,9 +86,11 @@ for s in range(n):
     WayArr[s][f] = findWay(g, s, f)
 
 
+
 # Генератор маршрутор
-def routeGenerator(g, s, length, pols, fav = [], notfav = []):
-  pols = pols.copy()
+def routeGenerator(g, s, length, pols, fav = '', notfav = []):
+  if sum([g[s][i] for i in range(len(g))]) == -len(g) + 1:
+      return [0, []]
   inf = 10 ** 10
   if fav != [] or notfav != []:
     for i in range(len(pols)):
@@ -101,9 +113,9 @@ def routeGenerator(g, s, length, pols, fav = [], notfav = []):
     for i in range(1, n):
       if choice[i][0] > choice[maxInd][0]:
         maxInd = i
-    return [tmp + choice[maxInd][0], [s] + choice[maxInd][1]]
+    return [tmp + choice[maxInd][0], [s + 1] + choice[maxInd][1]]
   elif length == 0:
-    return [pols[s].rep, [s]]
+    return [pols[s].rep, [s + 1]]
   else:
     return [0, []]
 
@@ -142,30 +154,26 @@ def Route_points_page(request):
     if request.method == "POST":
         form = PointsForm(request.POST)
         if form.is_valid():
-            start = form.cleaned_data['start']
-            finish = form.cleaned_data['finish']
+            start = form.cleaned_data['start'] - 1
+            finish = form.cleaned_data['finish'] - 1
 
             res = WayArr[start][finish]
             dist = res[0]
-            way_arr = [(str(i) + " - " + pols[i - 1].name) for i in res[1]]
+            way_arr = [(str(i + 1) + " - " + pols[i].name) for i in res[1]]
 
             if dist != -1:
                 context['dist'] = "Время прохождения маршрута: " + str(dist) + " мин."
                 w_distance = str(dist*66) + " м."
                 time = str(dist) + " мин."
                 context['way_arr'] = way_arr
-                s_arr = str(pols[res[1][0] - 1].name) + " -> " + str(pols[res[1][-1] - 1].name)
+                s_arr = str(pols[res[1][0]].name) + " -> " + str(pols[res[1][-1]].name)
+                if request.user.is_authenticated:
+                    record = Way(user=request.user, arr=s_arr, created_at=datetime.datetime.now(), time=time,
+                                 distance=w_distance)
+                    record.save()
             else:
                 context['dist'] = "Такой маршрут невозможно построить"
                 context['way_arr'] = []
-                w_distance = ''
-                time = ''
-                s_arr = "Нет пути"
-
-            if request.user.is_authenticated:
-                record = Way(user=request.user, arr=s_arr, created_at=datetime.datetime.now(), time=time,
-                             distance=w_distance)
-                record.save()
 
     else:
         form = PointsForm()
@@ -183,11 +191,19 @@ def Route_time_page(request):
         if form.is_valid():
             start = form.cleaned_data['start']
             time = form.cleaned_data['time']
-
-
-
-
-
+            theme = form.cleaned_data['vote_type']
+            res = routeGenerator(g, start - 1, time, copy.deepcopy(pols), fav=theme)[1]
+            # res = [pols[i - 1].name for i in res]
+            context['way_arr'] = [(str(i) + " - " + pols[i-1].name) for i in res]
+            print(res)
+            res = [pols[i-1].name for i in res]
+            w_distance = str(time * 66) + " м."
+            time = str(time) + " мин."
+            s_arr = str(res[0]) + " -> " + str(res[-1])
+            if request.user.is_authenticated:
+                record = Way(user=request.user, arr=s_arr, created_at=datetime.datetime.now(), time=time,
+                             distance=w_distance)
+                record.save()
     else:
         form = TimeForm()
 
@@ -199,16 +215,8 @@ def Route_time_page(request):
 def Route_interest_page(request):
     context = {}
 
-    if request.method == "POST":
-        form = InterestForm(request.POST)
-        if form.is_valid():
-            theme = form.cleaned_data['theme']
+    context['way1'] = [1, 2, 3, 5, 6, 7, 8, 11, 12, 16, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37]
+    context['way2'] = [4, 5, 6, 7, 8, 10, 12, 13, 14, 20]
+    context['way3'] = [19, 27, 32, 34]
 
-
-
-    else:
-        form = InterestForm()
-
-    context['form'] = form
-
-    return render(request, 'interest_route.html', context)
+    return render(request, 'static_route.html', context)
