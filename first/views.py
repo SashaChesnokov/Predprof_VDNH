@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 
 # Create your views here.
-from first.forms import FindForm
+from first.forms import PointsForm, TimeForm, InterestForm
 from first.models import Way
 
 
@@ -128,11 +128,17 @@ def History_page(request):
     return render(request, 'history.html', context)
 
 
-def Route_SF_page(request):
+def Route_menu_page(request):
+    context = {}
+
+    return render(request, 'route_menu.html', context)
+
+
+def Route_points_page(request):
     context = {}
 
     if request.method == "POST":
-        form = FindForm(request.POST)
+        form = PointsForm(request.POST)
         if form.is_valid():
             start = form.cleaned_data['start']
             finish = form.cleaned_data['finish']
@@ -148,7 +154,7 @@ def Route_SF_page(request):
                 context['way_arr'] = way_arr
                 s_arr = str(pols[res[1][0] - 1].name) + " -> " + str(pols[res[1][-1] - 1].name)
             else:
-                context['dist'] = "Такой маршрут невозможно построить ¯\_(ツ)_/¯"
+                context['dist'] = "Такой маршрут невозможно построить"
                 context['way_arr'] = []
                 w_distance = ''
                 time = ''
@@ -160,14 +166,47 @@ def Route_SF_page(request):
                 record.save()
 
     else:
-        form = FindForm()
+        form = PointsForm()
 
     context['form'] = form
 
-    return render(request, 'create_route.html', context)
+    return render(request, 'points_route.html', context)
 
 
-def Route_menu_page(request):
+def Route_time_page(request):
     context = {}
 
-    return render(request, 'route_menu.html', context)
+    if request.method == "POST":
+        form = TimeForm(request.POST)
+        if form.is_valid():
+            start = form.cleaned_data['start']
+            time = form.cleaned_data['time']
+
+
+
+
+
+    else:
+        form = TimeForm()
+
+    context['form'] = form
+
+    return render(request, 'time_route.html', context)
+
+
+def Route_interest_page(request):
+    context = {}
+
+    if request.method == "POST":
+        form = InterestForm(request.POST)
+        if form.is_valid():
+            theme = form.cleaned_data['theme']
+
+
+
+    else:
+        form = InterestForm()
+
+    context['form'] = form
+
+    return render(request, 'interest_route.html', context)

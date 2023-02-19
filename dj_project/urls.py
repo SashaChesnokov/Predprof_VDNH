@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from first.views import Main_page, Info_page, Route_SF_page, History_page, Route_menu_page
+from first.views import Main_page, Info_page, Route_points_page, History_page, Route_menu_page, Route_time_page, \
+    Route_interest_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,9 +26,10 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('info/', Info_page, name='info'),
-    path('route_generate/', Route_SF_page, name='gen_route'),
     path('route_menu/', Route_menu_page, name='route_menu'),
-    # path('route_menu/', Route_page, name='route'),
+    path('points_route/', Route_points_page, name='points_route'),
+    path('time_route/', Route_time_page, name='time_route'),
+    path('interest_route/', Route_interest_page, name='interest_route'),
     path('history/', History_page, name='history')
 
 ]
