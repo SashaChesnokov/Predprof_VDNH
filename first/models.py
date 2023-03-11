@@ -7,6 +7,11 @@ from django.contrib.auth.models import User
 
 
 class Way(models.Model):
+    """
+    Основная модель для хранения путей
+
+    :param user:
+    """
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     arr = models.TextField(default='')
     distance = models.TextField(default='')

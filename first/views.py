@@ -11,42 +11,69 @@ from first.models import Way
 
 
 class Polygon:
-    def __init__(self, name, number, rep, tegs=[], des="", edges=[]):
+    def __init__(self, name, number, rep, tegs=[], edges=[]):
         self.name = name
         self.number = number
         self.rep = rep
-        self.des = des
         self.edges = edges
+
         if type(tegs) == type(""):
             self.tegs = [tegs]
         else:
             self.tegs = tegs
 
-# Инциализация графа
-p = open('first/polygon.txt', 'r', encoding='utf-8')
-n = len(open('first/polygon.txt', 'r', encoding='utf-8').readlines())
+    def repPlus(self):
+        self.rep += 1
+
+    def repMinus(self):
+        self.rep -= 1
+
+
+p = open("first/dist.txt", "r")
+n = len(open("first/dist.txt", "r").readlines())
 pols = []
 for i in range(n):
     reader = p.readline().replace(";", " ").split()
-    tmp = Polygon(name=reader[0].replace("_", " "), number=i, tegs=reader[1].replace("-", " ").split(), des=reader[2].replace("_", " "),
-                  rep=1, edges=[])
+    tmp = Polygon(name=reader[0].replace("_", " "),
+                  number=i,
+                  tegs=reader[1].replace("_", " ").split(),
+                  rep=int(reader[2].replace("_", " ")),
+                  edges=[])
+
     for i in range(3, len(reader), 2):
         tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
     pols += [copy.deepcopy(tmp)]
-
-
-
 g = [[-1 for i in range(len(pols))] for i in range(len(pols))]
+
 for i in range(len(pols)):
     g[i][i] = 0
 for p in range(len(pols)):
     for i in pols[p].edges:
         g[p][i[0] - 1] = i[1]
+
+
+def safe(pols):
+    p = open("first/dist.txt", "w")
+    for i in pols:
+        tmp = ""
+        tmp += i.name.replace(" ", "_") + ";"
+        for k in i.tegs:
+            tmp += k
+            if k != i.tegs[-1]:
+                tmp += "-"
+        tmp += ";" + str(i.rep) + ";"
+        for k in i.edges:
+            tmp += str(k[0]) + " " + str(k[1]) + " "
+        if i != pols[-1]:
+            tmp += "\n"
+        p.write(tmp)
+
 counter = 0
 for x in range(len(g)):
     for y in range(len(g)):
         if g[x][y] != g[y][x]:
             counter += 1
+
 
 # Модифицированная деикстра
 def findWay(g, s, f):
@@ -84,39 +111,60 @@ for s in range(n):
     WayArr[s][f] = findWay(g, s, f)
 
 
-
 # Генератор маршрутор
-def routeGenerator(g, s, length, pols, fav =[], notfav = []):
-  if sum([g[s][i] for i in range(len(g))]) == -len(g) + 1:
-      return [0, []]
-  inf = 10 ** 10
+def routeGenerator(g, s, l, pols, fav=[], notfav=[]):
+  #Генерация репутации
   if fav != [] or notfav != []:
+    inf = 10**10
     for i in range(len(pols)):
       for j in fav:
         if j in pols[i].tegs:
-          pols[i].rep += inf
+          pols[i].rep = inf
       for j in notfav:
         if j in pols[i].tegs:
           pols[i].rep = -inf
 
-  if length > 0:
-    tmp = pols[s].rep
-    pols[s].rep = -inf
-    choice = []
-    n = 0
-    for i in range(len(g[s])):
-      if g[s][i] > 0:
-        n += 1
-        choice += [routeGenerator(g, i, length - g[s][i], copy.deepcopy(pols))]
-    maxInd = 0
-    for i in range(1, n):
-      if choice[i][0] > choice[maxInd][0]:
-        maxInd = i
-    return [tmp + choice[maxInd][0], [s + 1] + choice[maxInd][1]]
-  elif length == 0:
-    return [pols[s].rep, [s + 1]]
-  else:
-    return [0, []]
+  #Инцилизация переменных
+  n = len(g)
+  way = [[-1]] * n
+  way[s] = [s + 1]
+
+  inf = 10**10
+
+  dist = [inf] * n
+  dist[s] = 0
+
+  rep = [-1] * n
+  rep[s] = pols[s].rep
+
+  v = [False] * n
+
+  #Оснавная часть
+  while True:
+    m = -inf
+    for j in range(n):
+      if not v[j] and rep[j] > m:
+        m = rep[j]
+        md = j
+    if m == -inf:
+      break
+    i = md
+    v[i] = True
+    for k in range(n):
+      if rep[i] + pols[i].rep > rep[k] and dist[i] + g[i][k] <= l and g[i][
+          k] > 0:
+        dist[k] = dist[i] + g[i][k]
+        way[k] = way[i] + [k + 1]
+        rep[k] = rep[i] + pols[i].rep
+        if (k + 1) in way[:-1]:
+          rep[k] -= 10**5
+
+  max = 0
+  for i in range(n):
+    if (rep[i] > rep[max]):
+      max = i
+
+  return [dist[max], way[max]]
 
 
 def Main_page(request):
