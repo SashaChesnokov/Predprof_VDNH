@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 <div class="container">
     <center>
         <div class="row mt-5">
@@ -13,8 +14,8 @@
                             <center>
                                 <div class="col">
                                     <table class="table table-striped">
-                                        <tr><td>1 Павильон № 1 «Центральный»</td></tr>
-                                        <tr><td>2 Павильон № 2 «Народное образование» («Грузия»)</td></tr>
+                                        <tr><td>1 Павильон № 1 «Центральный»</td><td><img src="{% static 'img/1.jpg' %}" width="300"></td></tr>
+                                        <tr><td>2 Павильон № 2 «Народное образование» («Грузия»)</td><td><img src="{% static 'img/2.jpg' %}" width="300"></td></tr>
                                         <tr><td>3 Павильон № 5 «Физика»</td></tr>
                                         <tr><td>4 Павильон № 10 «Стандарты»</td></tr>
                                         <tr><td>5 Павильон № 11 «Металлургия» («Казахстан»)</td></tr>
