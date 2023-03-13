@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 <div class="container">
     <center>
-        <div class="row mt-5">
+        <div class="row mt-3">
             <center>
-                <div class="col-5">
+                <div class="col-8">
                     <div class="card border-danger">
                         <div class="row mt-5">
                             <div class="col">
-                                <img src="https://sun9-70.userapi.com/impg/OgJp2vdmQjbzn6KjnpR7ZkNpbBKjoZ8qhB_PTw/_K7d9t64Jec.jpg?size=1240x1690&quality=96&sign=1f1ebe51b05c13257df37414eec9f974&type=album"
-                                     class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                                <img src="{% static 'img/map.jpeg' %}" class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
                             </div>
                         </div>
                         <div class="card-body">
@@ -52,6 +52,90 @@
             </center>
         </div>
     </center>
+</div>
+
+{% endblock %}
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="container">
+        <div class="row mt-3">
+            {% if request.method == "GET" %}
+            <center>
+            {% endif %}
+                <div class="col-8">
+                    <div class="card border-danger">
+                        <div class="row mt-5">
+                            <div class="col">
+                                <img src="{% static 'img/map.jpeg' %}" class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><b class="text-danger-emphasis">Маршруты</b></h5>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <table class="table table-striped">
+                                    <tr><td><b>Выставки</b></td></tr>
+                                    {% for point in way1 %}
+                                    <tr>
+                                        <td>{{ point }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="col">
+                                <table class="table table-striped">
+                                    <tr><td><b>Народы СССР</b></td></tr>
+                                    {% for point in way2 %}
+                                    <tr>
+                                        <td>{{ point }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="col">
+                                <table class="table table-striped">
+                                    <tr><td><b>Наука</b></td></tr>
+                                    {% for point in way3 %}
+                                    <tr>
+                                        <td>{{ point }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% if request.method == "GET" %}
+            </center>
+            {% endif %}
+                {% if request.method == "POST" %}
+                    <div class="col-4">
+                        <center>
+                        <div class="card border-danger">
+                            <div class="card-body">
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <p>{{ dist }}</p>
+                                <center>
+                                    <ul class="list-group list-group-flush">
+                                        {% for i in way_arr %}
+                                        <center>
+                                            <li class="list-group-item" style="width: 18rem;">{{ i }}</li>
+                                        </center>
+                                        {% endfor %}
+                                    </ul>
+                                </center>
+                                </div>
+                            </div>
+                        </div>
+                        </center>
+                    </div>
+                {% endif %}
+        </div>
 </div>
 
 {% endblock %}

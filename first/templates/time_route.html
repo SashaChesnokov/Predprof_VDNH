@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 <div class="container">
     <center>
-        <div class="row mt-5">
+        <div class="row mt-3">
             <center>
-                <div class="col-5">
+                <div class="col-8">
                     <div class="card border-danger">
                         <div class="row mt-5">
                             <div class="col">
-                                <img src="https://sun9-70.userapi.com/impg/OgJp2vdmQjbzn6KjnpR7ZkNpbBKjoZ8qhB_PTw/_K7d9t64Jec.jpg?size=1240x1690&quality=96&sign=1f1ebe51b05c13257df37414eec9f974&type=album"
-                                     class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                                <img src="{% static 'img/map.jpeg' %}" class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
                             </div>
                         </div>
                         <div class="card-body">
