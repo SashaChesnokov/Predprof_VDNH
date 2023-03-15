@@ -2,58 +2,117 @@
 {% block content %}
 {% load static %}
 <div class="container">
-        <div class="row mt-3">
-            {% if request.method == "GET" %}
+    <div class="row mt-5">
+        <div class="col-8">
             <center>
-            {% endif %}
-                <div class="col-8">
-                    <div class="card border-danger">
-                        <div class="row mt-5">
-                            <div class="col">
-                                <img src="{% static 'img/map.jpeg' %}" class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
-                            </div>
+                <div class="card border-danger">
+                    <div class="row mt-5">
+                        <div class="col">
+                            <img src="{% static 'img/Выставки.jpeg' %}"
+                                 class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title"><b class="text-danger-emphasis">Маршруты</b></h5>
-                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+        <div class="col-4">
+            <center>
+                <div class="card border-danger">
+                    <div class="card-body">
                         <div class="mb-3 row">
                             <div class="col">
-                                <table class="table table-striped">
-                                    <tr><td><b>Выставки</b></td></tr>
-                                    {% for point in way1 %}
-                                    <tr>
-                                        <td>{{ point }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                            <div class="col">
-                                <table class="table table-striped">
-                                    <tr><td><b>Народы СССР</b></td></tr>
-                                    {% for point in way2 %}
-                                    <tr>
-                                        <td>{{ point }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                            <div class="col">
-                                <table class="table table-striped">
-                                    <tr><td><b>Наука</b></td></tr>
-                                    {% for point in way3 %}
-                                    <tr>
-                                        <td>{{ point }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
+                                <h5><b class="text-danger-emphasis">Выставки</b></h5>
+                                <p>{{ dist_v }}</p>
+                                <center>
+                                    <ul class="list-group list-group-flush">
+                                        {% for i in way_arr_v %}
+                                        <center>
+                                            <li class="list-group-item" style="width: 18rem;">{{ i }}</li>
+                                        </center>
+                                        {% endfor %}
+                                    </ul>
+                                </center>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% if request.method == "GET" %}
             </center>
-            {% endif %}
         </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-8">
+            <center>
+                <div class="card border-danger">
+                    <div class="row mt-5">
+                        <div class="col">
+                            <img src="{% static 'img/СССР.jpeg' %}"
+                                 class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+        <div class="col-4">
+            <center>
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <h5><b class="text-danger-emphasis">СССР</b></h5>
+                                <p>{{ dist_s }}</p>
+                                <center>
+                                    <ul class="list-group list-group-flush">
+                                        {% for i in way_arr_s %}
+                                        <center>
+                                            <li class="list-group-item" style="width: 18rem;">{{ i }}</li>
+                                        </center>
+                                        {% endfor %}
+                                    </ul>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="row mt-5 mb-3">
+        <div class="col-8">
+            <center>
+                <div class="card border-danger">
+                    <div class="row mt-5">
+                        <div class="col">
+                            <img src="{% static 'img/Наука.jpeg' %}"
+                                 class="card-img-top border-danger-subtle bg-danger-subtle" alt="">
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+        <div class="col-4">
+            <center>
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <h5><b class="text-danger-emphasis">Наука</b></h5>
+                                <p>{{ dist_n }}</p>
+                                <center>
+                                    <ul class="list-group list-group-flush">
+                                        {% for i in way_arr_n %}
+                                        <center>
+                                            <li class="list-group-item" style="width: 18rem;">{{ i }}</li>
+                                        </center>
+                                        {% endfor %}
+                                    </ul>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
