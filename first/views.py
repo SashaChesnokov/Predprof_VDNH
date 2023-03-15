@@ -11,6 +11,12 @@ from first.models import Way
 
 
 class Polygon:
+    """
+    Класс для полигонра
+
+    Список павильонов
+    Перебирает все елементы массива, сохраняя их в удобном для считывании формате в текстовый файл
+    """
     def __init__(self, name, number, rep, tegs=[], edges=[]):
         self.name = name
         self.number = number
@@ -52,7 +58,13 @@ for p in range(len(pols)):
         g[p][i[0] - 1] = i[1]
 
 
-def safe(pols):
+def save(pols):
+    """
+    Функция save
+
+    :param pols: Список павильонов
+    Перебирает все елементы массива, сохраняя их в удобном для считывании формате в текстовый файл
+    """
     p = open("first/dist.txt", "w")
     for i in pols:
         tmp = ""
@@ -77,6 +89,16 @@ for x in range(len(g)):
 
 # Модифицированная деикстра
 def findWay(g, s, f):
+    """
+    Функция findWay
+
+    :param g: Граф
+    :param s: Номер точки начала маршрута
+    :param f: Номер точки конца маршрута
+    :return: Длина до искомой точки и маршрут до нее (список)
+
+    *За основу взят алгоритм Деикстры*
+    """
     n = len(g)
     way = [[-1]] * n
     way[s] = [s]
@@ -168,6 +190,13 @@ def routeGenerator(g, s, l, pols, fav=[], notfav=[]):
 
 
 def Main_page(request):
+    """
+    Функция главной страницы
+
+    :param request: Объект с деталями запроса
+    :type request: :class:`django.http.HttpRequest`
+    :return: Объект ответа сервера с HTML-кодом внутри
+    """
     context = {}
 
     return render(request, 'index.html', context)

@@ -10,7 +10,12 @@ class Way(models.Model):
     """
     Основная модель для хранения путей
 
-    :param user:
+    :param user: Создатель маршрута
+    :param arr: Список павильонов, через которые проходит маршрут
+    :param distance: Длина маршрута
+    :param time: Время на прохождение маршрута*
+    :param created_at: Дата создания маршрута
+    *\*Время пребывания в павильонах не учитывается.*
     """
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     arr = models.TextField(default='')
