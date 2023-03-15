@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
 
-
 # Create your views here.
 from first.forms import PointsForm, TimeForm, InterestForm
 from first.models import Way
@@ -12,11 +11,12 @@ from first.models import Way
 
 class Polygon:
     """
-    Класс для полигонра
+    Класс для полигона
 
     Список павильонов
     Перебирает все елементы массива, сохраняя их в удобном для считывании формате в текстовый файл
     """
+
     def __init__(self, name, number, rep, tegs=[], edges=[]):
         self.name = name
         self.number = number
@@ -35,8 +35,9 @@ class Polygon:
         self.rep -= 1
 
 
-p = open("first/dist.txt", "r")
-n = len(open("first/dist.txt", "r").readlines())
+n = len(open("/home/prom/PycharmProjects/Predprof/dj_project/first/dist.txt",
+             "r").readlines())  # Считывание информации о павильонах из текстового документа и заполнение массива
+p = open('/home/prom/PycharmProjects/Predprof/dj_project/first/dist.txt', "r")
 pols = []
 for i in range(n):
     reader = p.readline().replace(";", " ").split()
@@ -49,7 +50,7 @@ for i in range(n):
     for i in range(3, len(reader), 2):
         tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
     pols += [copy.deepcopy(tmp)]
-g = [[-1 for i in range(len(pols))] for i in range(len(pols))]
+g = [[-1 for i in range(len(pols))] for i in range(len(pols))]  # Генерация графа по времени между соседними павильонами
 
 for i in range(len(pols)):
     g[i][i] = 0
@@ -63,7 +64,7 @@ def save(pols):
     Функция save
 
     :param pols: Список павильонов
-    Перебирает все елементы массива, сохраняя их в удобном для считывании формате в текстовый файл
+    Перебирает все елементы массива, сохраняя их в удобном для считывании формате, в текстовый файл ``dist.txt``
     """
     p = open("first/dist.txt", "w")
     for i in pols:
@@ -80,6 +81,7 @@ def save(pols):
             tmp += "\n"
         p.write(tmp)
 
+
 counter = 0
 for x in range(len(g)):
     for y in range(len(g)):
@@ -95,25 +97,25 @@ def findWay(g, s, f):
     :param g: Граф
     :param s: Номер точки начала маршрута
     :param f: Номер точки конца маршрута
-    :return: Длина до искомой точки и маршрут до нее (список)
+    :return: Длина до искомой точки и маршрут до нее (список павильонов)
 
     *За основу взят алгоритм Деикстры*
     """
-    n = len(g)
+    n = len(g)  # Объявление констант, а также массива растояний, массива маршрутов и массива посещенных вершин
     way = [[-1]] * n
     way[s] = [s]
     inf = 10 ** 9
     dist = [inf] * n
     dist[s] = 0
     v = [False] * n
-    while True:
+    while True:  # Пока существуют непосещенные вершины:
         m = inf
         for j in range(n):
-            if not v[j] and dist[j] < m:
-                m = dist[j]
+            if not v[j] and dist[j] < m:  # Если существует длина пути меньше текущей:
+                m = dist[j]  # Обновление длины и маршрута
                 md = j
         if m == inf:
-           break
+            break
         i = md
         v[i] = True
         for k in range(n):
@@ -129,74 +131,79 @@ def findWay(g, s, f):
 # Оптимизация алгоритма нахождения пути и растоянии путем генерации всевозможных маршрутов
 WayArr = [[[[]] for i in range(n)] for j in range(n)]
 for s in range(n):
-  for f in range(n):
-    WayArr[s][f] = findWay(g, s, f)
+    for f in range(n):
+        WayArr[s][f] = findWay(g, s, f)
 
 
 # Генератор маршрутор
 def routeGenerator(g, s, l, pols, fav=[], notfav=[]):
-  #Генерация репутации
-  if fav != [] or notfav != []:
-    inf = 10**10
-    for i in range(len(pols)):
-      for j in fav:
-        if j in pols[i].tegs:
-          pols[i].rep = inf
-      for j in notfav:
-        if j in pols[i].tegs:
-          pols[i].rep = -inf
+    """
+    Функция routeGenerator
 
-  #Инцилизация переменных
-  n = len(g)
-  way = [[-1]] * n
-  way[s] = [s + 1]
+    :param g: Граф
+    :param s: Номер точки начала маршрута
+    :param l: Максимальное время прохождения пути
+    :param fav: Список интересующих типов павильонов
+    :param notfav: Список не интересующих типов павильонов
+    :return: Лучший маршрут (список павильонов) и его длину
 
-  inf = 10**10
+    *За основу взят алгоритм Деикстры*
+    """
+    # Генерация репутации
+    if fav != [] or notfav != []:  # Если есть предпочтения, то взависимости от их изменяет репутацию павильонов
+        inf = 10 ** 10
+        for i in range(len(pols)):
+            for j in fav:
+                if j in pols[i].tegs:
+                    pols[i].rep = inf
+            for j in notfav:
+                if j in pols[i].tegs:
+                    pols[i].rep = -inf
 
-  dist = [inf] * n
-  dist[s] = 0
+    # Объявление констант, а также массива растояний, массива маршрутов, массива репутации и массива посещенных вершин
+    n = len(g)
+    way = [[-1]] * n
+    way[s] = [s + 1]
 
-  rep = [-1] * n
-  rep[s] = pols[s].rep
+    inf = 10 ** 10
 
-  v = [False] * n
+    dist = [inf] * n
+    dist[s] = 0
 
-  #Оснавная часть
-  while True:
-    m = -inf
-    for j in range(n):
-      if not v[j] and rep[j] > m:
-        m = rep[j]
-        md = j
-    if m == -inf:
-      break
-    i = md
-    v[i] = True
-    for k in range(n):
-      if rep[i] + pols[i].rep > rep[k] and dist[i] + g[i][k] <= l and g[i][
-          k] > 0:
-        dist[k] = dist[i] + g[i][k]
-        way[k] = way[i] + [k + 1]
-        rep[k] = rep[i] + pols[i].rep
-        if (k + 1) in way[:-1]:
-          rep[k] -= 10**5
+    rep = [-1] * n
+    rep[s] = pols[s].rep
 
-  max = 0
-  for i in range(n):
-    if (rep[i] > rep[max]):
-      max = i
+    v = [False] * n
 
-  return [dist[max], way[max]]
+    # Оснавная часть
+    while True:  # Пока существуют непосещенные вершины:
+        m = -inf
+        for j in range(n):
+            if not v[j] and rep[j] > m:  # Если существует длина пути с большей репутацией:
+                m = rep[j]  # Обновление длины пути до точки, репутации точки и маршрута
+                md = j
+        if m == -inf:
+            break
+        i = md
+        v[i] = True
+        for k in range(n):
+            if rep[i] + pols[i].rep > rep[k] and dist[i] + g[i][k] <= l and g[i][
+                k] > 0:
+                dist[k] = dist[i] + g[i][k]
+                way[k] = way[i] + [k + 1]
+                rep[k] = rep[i] + pols[i].rep
+                if (k + 1) in way[:-1]:
+                    rep[k] -= 10 ** 5
+
+    max = 0
+    for i in range(n):
+        if (rep[i] > rep[max]):
+            max = i
+
+    return [dist[max], way[max]]
 
 
 def Main_page(request):
-    """
-    Функция главной страницы
-
-    :param request: Объект с деталями запроса
-    :type request: :class:`django.http.HttpRequest`
-    :return: Объект ответа сервера с HTML-кодом внутри
-    """
     context = {}
 
     return render(request, 'index.html', context)
@@ -239,7 +246,7 @@ def Route_points_page(request):
 
             if dist != -1:
                 context['dist'] = "Время прохождения маршрута: " + str(dist) + " мин."
-                w_distance = str(dist*66) + " м."
+                w_distance = str(dist * 66) + " м."
                 time = str(dist) + " мин."
                 context['way_arr'] = way_arr
                 s_arr = str(pols[res[1][0]].name) + " -> " + str(pols[res[1][-1]].name)
@@ -270,8 +277,8 @@ def Route_time_page(request):
             theme = form.cleaned_data['vote_type']
 
             res = routeGenerator(g, start - 1, time, copy.deepcopy(pols), [theme])[1]
-            context['way_arr'] = [(str(i) + " - " + pols[i-1].name) for i in res]
-            res = [pols[i-1].name for i in res]
+            context['way_arr'] = [(str(i) + " - " + pols[i - 1].name) for i in res]
+            res = [pols[i - 1].name for i in res]
             w_distance = str(time * 66) + " м."
             time = str(time) + " мин."
             s_arr = str(res[0]) + " -> " + str(res[-1])
@@ -290,7 +297,8 @@ def Route_time_page(request):
 def Route_interest_page(request):
     context = {}
 
-    context['way1'] = [1, 2, 3, 5, 6, 7, 8, 11, 12, 16, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37]
+    context['way1'] = [1, 2, 3, 5, 6, 7, 8, 11, 12, 16, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35,
+                       37]
     context['way2'] = [4, 5, 6, 7, 8, 10, 12, 13, 14, 20]
     context['way3'] = [19, 27, 32, 34]
 
