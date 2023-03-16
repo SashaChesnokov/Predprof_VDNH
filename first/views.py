@@ -7,7 +7,9 @@ from django.shortcuts import render
 # Create your views here.
 from first.forms import PointsForm, TimeForm, InterestForm
 from first.models import Way
+from sys import setrecursionlimit
 
+setrecursionlimit(20000)
 
 class Polygon:
     """
@@ -43,16 +45,16 @@ n = len(open("first/dist.txt",
              "r").readlines())  # Считывание информации о павильонах из текстового документа и заполнение массива
 pols = []
 for i in range(n):
-    reader = p.readline().replace(";", " ").split()
-    tmp = Polygon(name=reader[0].replace("_", " "),
-                  number=i,
-                  tegs=reader[1].replace("_", " ").split(),
-                  rep=int(reader[2].replace("_", " ")),
-                  edges=[])
+  reader = p.readline().replace(";", " ").split()
+  tmp = Polygon(name=reader[0].replace("_", " "),
+                number=i,
+                tegs=reader[1].replace("-", " ").split(),
+                rep=int(reader[2].replace("_", " ")),
+                edges=[])
 
-    for i in range(3, len(reader), 2):
-        tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
-    pols += [copy.deepcopy(tmp)]
+  for i in range(3, len(reader), 2):
+    tmp.edges += [[int(reader[i]), int(reader[i + 1])]]
+  pols += [copy.deepcopy(tmp)]
 g = [[-1 for i in range(len(pols))] for i in range(len(pols))]  # Генерация графа по времени между соседними павильонами
 
 for i in range(len(pols)):
@@ -139,7 +141,7 @@ for s in range(n):
 
 
 # Генератор маршрутор
-def routeGenerator(g, s, l, pols, fav=[], notfav=[]):
+def routeGenerator(g, s, length, pols, fav=[]):
     """
     Функция routeGenerator
 
@@ -152,58 +154,35 @@ def routeGenerator(g, s, l, pols, fav=[], notfav=[]):
 
     *За основу взят алгоритм Деикстры*
     """
-    # Генерация репутации
-    if fav != [] or notfav != []:  # Если есть предпочтения, то взависимости от их изменяет репутацию павильонов
-        inf = 10 ** 10
-        for i in range(len(pols)):
-            for j in fav:
-                if j in pols[i].tegs:
-                    pols[i].rep = inf
-            for j in notfav:
-                if j in pols[i].tegs:
-                    pols[i].rep = -inf
-
-    # Объявление констант, а также массива растояний, массива маршрутов, массива репутации и массива посещенных вершин
-    n = len(g)
-    way = [[-1]] * n
-    way[s] = [s + 1]
-
     inf = 10 ** 10
+    pols = pols[::1]
 
-    dist = [inf] * n
-    dist[s] = 0
+    for j in fav:
+        for i in range(len(pols)):
+            if j in pols[i].tegs:
+                pols[i].rep = inf
 
-    rep = [-1] * n
-    rep[s] = pols[s].rep
+    if length > 0:
+        tmp = pols[s].rep
+        pols[s].rep = -inf
+        choice = []
+        n = 0
+        for i in range(len(g[s])):
+            if g[s][i] > 0 and pols[i].rep > -10 ** 5 and length - g[s][i] > 0:
+                n += 1
+                choice += [routeGenerator(g, i, length - g[s][i], pols)]
+        maxInd = 0
+        if n == 0:
+            return [tmp, [s + 1]]
 
-    v = [False] * n
-
-    # Оснавная часть
-    while True:  # Пока существуют непосещенные вершины:
-        m = -inf
-        for j in range(n):
-            if not v[j] and rep[j] > m:  # Если существует длина пути с большей репутацией:
-                m = rep[j]  # Обновление длины пути до точки, репутации точки и маршрута
-                md = j
-        if m == -inf:
-            break
-        i = md
-        v[i] = True
-        for k in range(n):
-            if rep[i] + pols[i].rep > rep[k] and dist[i] + g[i][k] <= l and g[i][
-                k] > 0:
-                dist[k] = dist[i] + g[i][k]
-                way[k] = way[i] + [k + 1]
-                rep[k] = rep[i] + pols[i].rep
-                if (k + 1) in way[:-1]:
-                    rep[k] -= 10 ** 5
-
-    max = 0
-    for i in range(n):
-        if (rep[i] > rep[max]):
-            max = i
-
-    return [dist[max], way[max]]
+        for i in range(0, n):
+            if choice[i][0] > choice[maxInd][0]:
+                maxInd = i
+        return [tmp + choice[maxInd][0], [s + 1] + choice[maxInd][1]]
+    elif length == 0:
+        return [pols[s].rep, [s + 1]]
+    else:
+        return [0, []]
 
 
 def Main_page(request):
