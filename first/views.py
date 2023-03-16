@@ -11,10 +11,15 @@ from first.models import Way
 
 class Polygon:
     """
-    Класс для полигона
+    Класс Polygon для хранения информации о павильонах
 
-    Список павильонов
-    Перебирает все елементы массива, сохраняя их в удобном для считывании формате в текстовый файл
+    , такой как имя, номер на карте, репутация (для расчета интересных путей), а также другие павильоны с котырыми он соединен и растояние между ними
+
+    :param name: Название павильона
+    :param number: Номер на карте
+    :param rep: репутация (для расчета интересных путей)
+    :param tegs: Тема павильона
+    :param edges: Список павильонов, с котырыми соединен, и растояние между ними
     """
 
     def __init__(self, name, number, rep, tegs=[], edges=[]):
@@ -35,9 +40,9 @@ class Polygon:
         self.rep -= 1
 
 
-n = len(open("/home/prom/PycharmProjects/Predprof/dj_project/first/dist.txt",
+p = open('first/dist.txt', "r")
+n = len(open("first/dist.txt",
              "r").readlines())  # Считывание информации о павильонах из текстового документа и заполнение массива
-p = open('/home/prom/PycharmProjects/Predprof/dj_project/first/dist.txt', "r")
 pols = []
 for i in range(n):
     reader = p.readline().replace(";", " ").split()
