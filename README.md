@@ -27,8 +27,8 @@
 
 1. Клонируйте репозиторий:
 ```bash
-    git clone https://github.com/yourusername/vdnh-router.git
-    cd vdnh-router
+    git clone https://github.com/chesnokov-an/Predprof_VDNH.git
+    cd Predprof_VDNH
     python -m venv venv
     source venv/bin/activate  # Linux/MacOS
     venv\Scripts\activate     # Windows
